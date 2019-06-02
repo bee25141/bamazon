@@ -1,5 +1,5 @@
 const mysql = require("mysql");
-const enquirer = require("enquirer");
+const inquirer = require("inquirer");
 const userName = "";
 const connection = mysql.createConnection({
     host: "localhost",
@@ -17,17 +17,26 @@ connection.connect(function (err) {
 
 let queryType = process.argv[2];
 let userInput = process.argv.slice(3).join(" ");
+storeView();
 
 function storeView() {
-    console.log("Selecting all products...\n");
+    // console.log("Selecting all products...\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        // Log all results of the SELECT statement
-        console.log(Object.keys(RowDataProduct));
-        // for (i=0; i<res.RowDataPacket.length; i++){
-        //     console.log(res[i])
-        // }
+        res.forEach(item => console.log(item.id, item.PRODUCT_NAME, item.PRICE));
+        inquirer.prompt([{
+            name: "id",
+            message: "Select a product ID to purchase",
+            type: "input"
+        },
+        {
+            name: "quantity",
+            message: "Enter a quantity",
+            type: "input"
+        }
+    ]).then(answers => {
+        console.log(answers.id, answers.quantity);
+        });
         connection.end();
     });
 };
-storeView();
