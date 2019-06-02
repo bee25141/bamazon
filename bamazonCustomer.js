@@ -35,7 +35,14 @@ function storeView() {
             type: "input"
         }
     ]).then(answers => {
-        console.log(answers.id, answers.quantity);
+        let itemToBuy = res.find(item => item.id == answers.id);
+        console.log(itemToBuy);
+        if(itemToBuy.STOCK_QUANTITY < answers.quantity){
+            throw err;
+        }else{
+            let cost = itemToBuy.PRICE * answers.quantity;
+            console.log(`Final cost: ${cost}`);
+        }
         });
         connection.end();
     });
