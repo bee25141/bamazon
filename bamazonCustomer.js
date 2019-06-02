@@ -25,24 +25,38 @@ function storeView() {
         if (err) throw err;
         res.forEach(item => console.log(item.id, item.PRODUCT_NAME, item.PRICE));
         inquirer.prompt([{
-            name: "id",
-            message: "Select a product ID to purchase",
-            type: "input"
-        },
-        {
-            name: "quantity",
-            message: "Enter a quantity",
-            type: "input"
-        }
-    ]).then(answers => {
-        let itemToBuy = res.find(item => item.id == answers.id);
-        console.log(itemToBuy);
-        if(itemToBuy.STOCK_QUANTITY < answers.quantity){
-            throw err;
-        }else{
-            let cost = itemToBuy.PRICE * answers.quantity;
-            console.log(`Final cost: ${cost}`);
-        }
+                name: "id",
+                message: "Select a product ID to purchase",
+                type: "input"
+            },
+            {
+                name: "quantity",
+                message: "Enter a quantity",
+                type: "input"
+            }
+        ]).then(answers => {
+            let itemToBuy = res.find(item => item.id == answers.id);
+            if (itemToBuy.STOCK_QUANTITY < answers.quantity) {
+                console.log("Insufficient quantity!")
+                throw err;
+            } else {
+                let cost = itemToBuy.PRICE * answers.quantity;
+                let itemsLeft = itemToBuy.STOCK_QUANTITY - answers.quantity;
+                connection.query(
+                    "UPDATE products SET ? WHERE ?" [{
+                            STOCK_QUANTITY: itemsLeft
+                        },
+                        {
+                            id: itemToBuy.id
+                        }
+                    ], (error, response) => {
+                        console.log(itemsLeft);
+                        // console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
+                        // console.log(`Final cost: ${cost} /n Remaining Quantity: ${itemToBuy.STOCK_QUANTITY}`);
+                    }
+                )
+
+            }
         });
         connection.end();
     });
