@@ -15,9 +15,20 @@ connection.connect(function (err) {
     console.log("connected as id " + connection.threadId);
 });
 
-let queryType = process.argv[2];
-let userInput = process.argv.slice(3).join(" ");
 storeView();
+
+function updateTest() {
+    connection.query("UPDATE products SET ? WHERE ?", [{
+            STOCK_QUANTITY: 500,
+        },
+        {
+            id: 2
+        }
+    ], (error, response) => {
+        console.log(response)
+    })
+};
+// updateTest();
 
 function storeView() {
     // console.log("Selecting all products...\n");
@@ -41,20 +52,18 @@ function storeView() {
                 throw err;
             } else {
                 let cost = itemToBuy.PRICE * answers.quantity;
-                let itemsLeft = itemToBuy.STOCK_QUANTITY - answers.quantity;
-                connection.query(
-                    "UPDATE products SET ? WHERE ?" [{
-                            STOCK_QUANTITY: itemsLeft
-                        },
-                        {
-                            id: itemToBuy.id
-                        }
-                    ], (error, response) => {
-                        console.log(itemsLeft);
-                        // console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
-                        // console.log(`Final cost: ${cost} /n Remaining Quantity: ${itemToBuy.STOCK_QUANTITY}`);
+                connection.query("UPDATE products SET ? WHERE ?", [{
+                        STOCK_QUANTITY: itemToBuy.STOCK_QUANTITY - answers.quantity,
+                    },
+                    {
+                        id: itemToBuy.id
                     }
-                )
+                ], (error, response) => {
+                    console.log(itemToBuy.id);
+                    // console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
+                    // console.log(`Final cost: ${cost} /n Remaining Quantity: ${itemToBuy.STOCK_QUANTITY}`);
+                    console.log(response);
+                })
 
             }
         });
