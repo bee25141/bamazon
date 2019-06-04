@@ -21,13 +21,25 @@ inquirer.prompt([{
     type: "list",
     choices: ["View Products", "View Low Inventory", "Add to Inventory", "Add New Product"]
 }]).then(answers => {
-    if (answers.choices === "View Products"){
+    if (answers.menuOptions === "View Products"){
+        console.log("view products")
         viewProducts();
-    } else if (answers.choices === "View Low Inventory"){
+    } else if (answers.menuOptions === "View Low Inventory"){
+        console.log("view low inventory")
         lowInventory();
-    } else if (answers.choices === "Add to Inventory"){
+    } else if (answers.menuOptions === "Add to Inventory"){
+        console.log("add inventory")
         addInventory();
-    } else if (answers.choices === "Add New Product"){
+    } else if (answers.menuOptions === "Add New Product"){
+        console.log("add product")
         addProduct();
     }
 })
+
+function viewProducts(){
+    console.log("Displaying all products... \n");
+    connection.query("SELECT * FROM products", function (err, res){
+       if (err) throw err;
+       res.forEach(item => console.log(`${item.id} ${item.PRODUCT_NAME} PRICE: $${item.PRICE} QUANTITY: ${item.STOCK_QUANTITY}`)); 
+    })
+}
