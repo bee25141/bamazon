@@ -25,5 +25,9 @@ inquirer.prompt([{
         viewProducts();
     } else if (answers.choices === "View Low Inventory"){
         lowInventory();
+    } else if (answers.choices === "Add to Inventory"){
+        addInventory();
+    } else if (answers.choices === "Add New Product"){
+        addProduct();
     }
 })
