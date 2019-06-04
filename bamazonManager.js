@@ -18,18 +18,15 @@ connection.connect(function (err) {
 //Prompting the user to choose a menu item of actions to make in the store inventory
 function start() {
     inquirer.prompt([{
-        name: "Menu Options",
+        name: "menuOptions",
         type: "list",
         choices: ["View Products", "View Low Inventory", "Add to Inventory", "Add New Product"]
     }]).then(answers => {
         if (answers.menuOptions === "View Products") {
-            console.log("view products")
             viewProducts();
         } else if (answers.menuOptions === "View Low Inventory") {
-            console.log("view low inventory")
             lowInventory();
         } else if (answers.menuOptions === "Add to Inventory") {
-            console.log("add inventory")
             inquirer.prompt([{
                     name: "updateID",
                     type: "input",
@@ -44,7 +41,6 @@ function start() {
                 addInventory(answers.updateID, answers.quantity);
             })
         } else if (answers.menuOptions === "Add New Product") {
-            console.log("add product")
             inquirer.prompt([{
                     name: "name",
                     type: "input",
@@ -80,6 +76,17 @@ function viewProducts() {
         res.forEach(item => console.log(`${item.id} ${item.PRODUCT_NAME} PRICE: $${item.PRICE} QUANTITY: ${item.STOCK_QUANTITY}`));
     })
     start();
+};
+
+//This function displays products with an inventory of less than 5 items
+function lowInventory() {
+    console.log("Displaying products with an inventory of less than 5 items... \n");
+    connection.query("SELECT * FROM products WHERE ?", [{
+        STOCK_QUANTITY: 
+    }], (err, res) => {
+        if (err) throw err;
+        console.log(res);
+    });
 };
 
 //This product updates a product inventory based on user input
