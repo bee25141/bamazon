@@ -18,7 +18,7 @@ connection.connect(function (err) {
 //Prompting the user to choose a menu item of actions to make in the store inventory
 function start() {
     inquirer.prompt([{
-        name: "menuOptions",
+        name: "Menu Options",
         type: "list",
         choices: ["View Products", "View Low Inventory", "Add to Inventory", "Add New Product"]
     }]).then(answers => {
@@ -45,7 +45,29 @@ function start() {
             })
         } else if (answers.menuOptions === "Add New Product") {
             console.log("add product")
-            addProduct();
+            inquirer.prompt([{
+                    name: "name",
+                    type: "input",
+                    message: "Enter new product name"
+                },
+                {
+                    name: "department",
+                    type: "input",
+                    message: "Enter new product department"
+                },
+                {
+                    name: "price",
+                    type: "input",
+                    message: "Enter product price"
+                },
+                {
+                    name: "quantity",
+                    type: "input",
+                    message: "Enter product quantity"
+                }
+            ]).then(answers => {
+                addProduct(answers.name, answers.department, answers.price, answers.quantity);
+            })
         }
     });
 };
@@ -57,6 +79,7 @@ function viewProducts() {
         if (err) throw err;
         res.forEach(item => console.log(`${item.id} ${item.PRODUCT_NAME} PRICE: $${item.PRICE} QUANTITY: ${item.STOCK_QUANTITY}`));
     })
+    start();
 };
 
 //This product updates a product inventory based on user input
@@ -72,21 +95,22 @@ function addInventory(productID, quantity) {
         if (err) throw err;
         console.log(`${res.affectedRows} Product inventory update successful!`);
     });
+    start();
 };
 
 //This function adds a new item to the database based on user input
-function addProduct(name, department, price, quantity){
+function addProduct(name, department, price, quantity) {
     console.log("Adding a new product... \n");
-    connection.query("INSERT INTO products SET ?",
-    {
-        PRODUCT_NAME: name,
-        DEPARTMENT_NAME: department,
-        PRICE: price,
-        STOCK_QUANTITY: quantity
-    },
-    function(err, res){
-        console.log(`${res.affectedRows} New product successfully added... \n`)
-    });
+    connection.query("INSERT INTO products SET ?", {
+            PRODUCT_NAME: name,
+            DEPARTMENT_NAME: department,
+            PRICE: price,
+            STOCK_QUANTITY: quantity
+        },
+        function (err, res) {
+            console.log(`${res.affectedRows} New product successfully added... \n`);
+            start();
+        });
 }
 
 //Running start function to intialize program
