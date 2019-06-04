@@ -61,19 +61,33 @@ function viewProducts() {
 
 //This product updates a product inventory based on user input
 function addInventory(productID, quantity) {
-    console.log("Updating product inventory... ");
+    console.log("Updating product inventory... \n");
     connection.query("UPDATE products SET ? WHERE ?", [{
             STOCK_QUANTITY: quantity,
         },
         {
             id: productID
         }
-    ], (err, response) => {
+    ], (err, res) => {
         if (err) throw err;
-        // console.log(`Successfully updated ${item.id} ${item.PRODUCT_NAME} New Quantity ${item.STOCK_QUANTITY}`);
-        console.log("Product inventory update successful!");
+        console.log(`${res.affectedRows} Product inventory update successful!`);
     });
 };
+
+//This function adds a new item to the database based on user input
+function addProduct(name, department, price, quantity){
+    console.log("Adding a new product... \n");
+    connection.query("INSERT INTO products SET ?",
+    {
+        PRODUCT_NAME: name,
+        DEPARTMENT_NAME: department,
+        PRICE: price,
+        STOCK_QUANTITY: quantity
+    },
+    function(err, res){
+        console.log(`${res.affectedRows} New product successfully added... \n`)
+    });
+}
 
 //Running start function to intialize program
 start();
