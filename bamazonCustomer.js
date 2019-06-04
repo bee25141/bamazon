@@ -1,3 +1,4 @@
+//Setting global variables and connection to MySql database
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const userName = "";
@@ -9,12 +10,12 @@ const connection = mysql.createConnection({
     database: "bamazon"
 
 });
-
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
 });
 
+//Calling function to display all available items in the store
 storeView();
 
 function updateTest() {
@@ -30,8 +31,10 @@ function updateTest() {
 };
 // updateTest();
 
+//This function displays all the items available in the store and allows the
+//user to purchase a quantity based on user input
 function storeView() {
-    // console.log("Selecting all products...\n");
+    console.log("Selecting all products...\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         res.forEach(item => console.log(item.id, item.PRODUCT_NAME, item.PRICE));
@@ -53,12 +56,12 @@ function storeView() {
             } else {
                 let cost = itemToBuy.PRICE * answers.quantity;
                 connection.query("UPDATE products SET ? WHERE ?", [{
+                        // STOCK_QUANTITY: itemToBuy.STOCK_QUANTITY - answers.quantity,
                         STOCK_QUANTITY: itemToBuy.STOCK_QUANTITY - answers.quantity,
                     },
                     {
-                        id: itemToBuy.id
-                    }
-                ], (error, response) => {
+                        id: itemToBuy
+                    }], (error, response) => {
                     console.log(itemToBuy.id);
                     // console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
                     // console.log(`Final cost: ${cost} /n Remaining Quantity: ${itemToBuy.STOCK_QUANTITY}`);
