@@ -81,8 +81,8 @@ function viewProducts() {
 //This function displays products with an inventory of less than 5 items
 function lowInventory() {
     console.log("Displaying products with an inventory of less than 5 items... \n");
-    connection.query("SELECT * FROM products WHERE ?", [{
-        STOCK_QUANTITY: 
+    connection.query("SELECT * FROM products WHERE STOCK_QUANTITY < 5", [{
+
     }], (err, res) => {
         if (err) throw err;
         console.log(res);
