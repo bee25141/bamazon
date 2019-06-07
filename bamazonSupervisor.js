@@ -7,8 +7,8 @@ const connection = mysql.createConnection({
     port: 8889,
     user: "root",
     password: "root",
-    database: "bamazon"
-
+    database: "bamazon" 
+ 
 });
 connection.connect(function (err) {
     if (err) throw err;
@@ -30,7 +30,7 @@ connection.connect(function (err) {
 
 function supervisorSales(){
     connection.query("SELECT * FROM department", function(err, res){
-        console.log(res);
+        console.table(res);
     })
 }
 supervisorSales();
