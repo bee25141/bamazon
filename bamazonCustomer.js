@@ -49,20 +49,24 @@ function storeView() {
                 type: "input"
             }
         ]).then(answers => {
-            let itemToBuy = res.find(item => item.id == answers.id);
+            var itemToBuy = res.find(item => item.id == answers.id);
             if (itemToBuy.STOCK_QUANTITY < answers.quantity) {
                 console.log("Insufficient quantity!")
                 throw err;
             } else {
+                var quant = parseInt(answers.quantity);
                 let cost = itemToBuy.PRICE * answers.quantity;
+                console.log(itemToBuy.STOCK_QUANTITY);
+                console.log(cost);
+                // buyItem(50, quant, itemToBuy);
                 connection.query("UPDATE products SET ? WHERE ?", [{
-                        // STOCK_QUANTITY: itemToBuy.STOCK_QUANTITY - answers.quantity,
-                        STOCK_QUANTITY: itemToBuy.STOCK_QUANTITY - answers.quantity,
+                        STOCK_QUANTITY: (itemToBuy.STOCK_QUANTITY - answers.quantity),
                     },
                     {
                         id: itemToBuy
                     }], (error, response) => {
                     console.log(itemToBuy.id);
+                    console.log(itemToBuy.STOCK_QUANTITY);
                     // console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
                     // console.log(`Final cost: ${cost} /n Remaining Quantity: ${itemToBuy.STOCK_QUANTITY}`);
                     console.log(response);
@@ -73,3 +77,15 @@ function storeView() {
         connection.end();
     });
 };
+
+function buyItem(){
+    connection.query("UPDATE products SET ? WHERE ?", [{
+        STOCK_QUANTITY: stock - answers,
+    },
+    {
+        id: item
+    }], (error, response) => {
+    console.log(response);
+})
+
+}

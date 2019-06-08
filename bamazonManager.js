@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
 });
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
+    // console.log("connected as id " + connection.threadId);
 });
 
 //Prompting the user to choose a menu item of actions to make in the store inventory
@@ -73,7 +73,7 @@ function viewProducts() {
     console.log("Displaying all products... \n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        res.forEach(item => console.log(`${item.id} ${item.PRODUCT_NAME} PRICE: $${item.PRICE} QUANTITY: ${item.STOCK_QUANTITY}`));
+        res.forEach(item => console.log(`\n ${item.id} ${item.PRODUCT_NAME} PRICE: $${item.PRICE} QUANTITY: ${item.STOCK_QUANTITY}`));
     })
     start();
 };
@@ -85,7 +85,8 @@ function lowInventory() {
 
     }], (err, res) => {
         if (err) throw err;
-        console.log(res);
+        res.forEach(item => console.log(`\n ${item.id} ${item.PRODUCT_NAME} QUANTITY: ${item.STOCK_QUANTITY}`));
+        start();
     });
 };
 
@@ -100,9 +101,9 @@ function addInventory(productID, quantity) {
         }
     ], (err, res) => {
         if (err) throw err;
-        console.log(`${res.affectedRows} Product inventory update successful!`);
+        console.log(`${res.affectedRows} Product inventory update successful! \n`);
+        start();
     });
-    start();
 };
 
 //This function adds a new item to the database based on user input
