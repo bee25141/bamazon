@@ -10,9 +10,9 @@ Customers are first introduced with the available items, and then prompted to se
 #bamazonManager
 The manager application allows users to view the storefront from a manager's perspective - they have the option to "View Products", "View Low Inventory", "Add to Inventory", or "Add a New Product" to the storefront.
 
-![Low-Inventory](images/manger1.png)
+![Low-Inventory](images/manager1.png)
 ![All-Products](images/allproducts.png)
-![Low-Inventory](images/manger2.png)
+![Low-Inventory](images/manager2.png)
 
 When the user chooses to add inventory to the storefront, they simply enter the product id of that they wish to update, followed by the new inventory total.
 ![Low-Inventory](images/addinventory.png)
