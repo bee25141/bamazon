@@ -69,3 +69,6 @@ ALTER TABLE products ADD COLUMN product_sales INT;
 
 SELECT a.`department_id`, a.`department_name`, a.`over_head_costs` FROM department AS a, b.`product_sales` FROM products AS b,
 LEFT JOIN b ON a;
+
+SELECT products.`department_id`, products.`department_name`, products.`over_head_costs` FROM department AS A, department.over_head_sales FROM department AS B,
+WHERE products.`DEPARTMENT_NAME` = department.department_name;

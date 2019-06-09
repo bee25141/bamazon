@@ -12,24 +12,11 @@ const connection = mysql.createConnection({
 });
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
+    // console.log("connected as id " + connection.threadId);
 });
 
 //Calling function to display all available items in the store
 storeView();
-
-function updateTest() {
-    connection.query("UPDATE products SET ? WHERE ?", [{
-            STOCK_QUANTITY: 500,
-        },
-        {
-            id: 2
-        }
-    ], (error, response) => {
-        console.log(response)
-    })
-};
-// updateTest();
 
 //This function displays all the items available in the store and allows the
 //user to purchase a quantity based on user input
@@ -56,20 +43,12 @@ function storeView() {
             } else {
                 var quant = parseInt(answers.quantity);
                 let cost = itemToBuy.PRICE * answers.quantity;
-                console.log(itemToBuy.STOCK_QUANTITY);
-                console.log(cost);
-                // buyItem(50, quant, itemToBuy);
-                connection.query("UPDATE products SET ? WHERE ?", [{
-                        STOCK_QUANTITY: (itemToBuy.STOCK_QUANTITY - answers.quantity),
-                    },
-                    {
-                        id: itemToBuy
+                var difference = parseInt(itemToBuy.STOCK_QUANTITY) - parseInt(answers.quantity);
+                connection.query(`UPDATE products SET STOCK_QUANTITY = ${difference} WHERE ?`, [{
+                        id: itemToBuy.id
                     }], (error, response) => {
-                    console.log(itemToBuy.id);
-                    console.log(itemToBuy.STOCK_QUANTITY);
-                    // console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
-                    // console.log(`Final cost: ${cost} /n Remaining Quantity: ${itemToBuy.STOCK_QUANTITY}`);
-                    console.log(response);
+                    console.log(`${itemToBuy.PRODUCT_NAME} Price: ${itemToBuy.PRICE} Quantity: ${answers.quantity}`);
+                    console.log(`\n Final cost: ${cost}`);
                 })
 
             }
@@ -77,15 +56,3 @@ function storeView() {
         connection.end();
     });
 };
-
-function buyItem(){
-    connection.query("UPDATE products SET ? WHERE ?", [{
-        STOCK_QUANTITY: stock - answers,
-    },
-    {
-        id: item
-    }], (error, response) => {
-    console.log(response);
-})
-
-}
