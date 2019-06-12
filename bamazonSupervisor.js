@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 });
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId);
+    // console.log("connected as id " + connection.threadId);
 });
 
 //This function begins the application and offers the user the choice between
@@ -27,13 +27,13 @@ inquirer.prompt([{
         supervisorSales();
     } else if(answers.menuOptions === "Create Department"){
         inquirer.prompt([{
-            name: name,
-            type: input,
+            name: "name",
+            type: "input",
             message: "Please enter a department name"
         },
     {
-        name: costs,
-        type: input,
+        name: "costs",
+        type: "input",
         message: "What are the department's overhead costs?"
     }]).then(answers => {
             createDepartment(answers.name, answers.costs)
@@ -59,6 +59,7 @@ let createDepartment = function (name, costs) {
 let supervisorSales = function() {
     connection.query("SELECT SUM(p.product_sales) AS sales, p.department_name, d.department_id, d.over_head_costs FROM products p INNER JOIN department d ON p.department_name = d.department_name GROUP BY d.department_id", function (err, res) {
         console.table(res);
+        start();
     })
 }
 
