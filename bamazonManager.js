@@ -1,7 +1,6 @@
 //Setting global variables and connection to MySql database
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-const userName = "";
 const connection = mysql.createConnection({
     host: "localhost",
     port: 8889,
