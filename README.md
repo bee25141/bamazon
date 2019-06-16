@@ -24,7 +24,6 @@ And when a user chooses to add a new product in the bamazonManager app, they're 
 
 # Built With
 Node.js <br>
-Express.js <br>
 MySQL database <br>
 Inquirer.js NPM for command line interface <br>
 JavaScript <br>
